@@ -1,0 +1,24 @@
+{
+  "name": "manage-vpn",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "Artem Klots",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist && mkdir ./dist",
+    "build": "cp -r src/* ./dist/",
+    "prezip": "yarn install --production --modules-folder dist/node_modules",
+    "zip": "cd dist && zip -r lambda.zip . && cd ..",
+    "predeploy": "yarn clean && yarn build && yarn prezip && yarn zip",
+    "deploy": "aws lambda update-function-code --region eu-central-1 --function-name manageVpn --zip-file fileb://dist/lambda.zip --profile personal"
+  },
+  "dependencies": {
+    "aws-sdk": "2.1361.0"
+  },
+  "devDependencies": {
+    "rimraf": "5.0.0"
+  }
+}
